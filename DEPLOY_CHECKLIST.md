@@ -17,6 +17,11 @@
 - [ ] `index.html` موجود في `public_html/`
 - [ ] لا توجد ملفات test مؤقتة
 
+### بنية المشروع
+- [ ] المشروع منظم: `public_html/` في الجذر
+- [ ] Install Path في Hostinger = `/` (الجذر) ⚠️ **مهم**
+- [ ] لا يوجد `public_html/public_html/` في المشروع
+
 ### الاختبار المحلي (إن أمكن)
 - [ ] الملفات تعمل محلياً
 - [ ] لا توجد أخطاء JavaScript في Console
@@ -43,8 +48,10 @@
 
 ### Hostinger
 - [ ] Git → Recent Deployments → آخر deployment: ✅
+- [ ] **Git → Install Path = `/` (الجذر)** ⚠️ **مهم جداً**
 - [ ] File Manager → `public_html/` → تاريخ الملفات محدث
-- [ ] File Manager → `public_html/index.html` موجود
+- [ ] File Manager → `public_html/index.html` موجود **مباشرة** (ليس في `public_html/public_html/`)
+- [ ] **File Manager → لا يوجد `public_html/public_html/`** ⚠️
 - [ ] File Manager → Permissions:
   - [ ] Files: 644
   - [ ] Folders: 755
