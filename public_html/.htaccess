@@ -1,0 +1,51 @@
+# Apache Configuration for Ramadan Imsakiya SaaS
+
+# Enable Rewrite Engine
+RewriteEngine On
+
+# Force HTTPS (uncomment when SSL is installed)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Set default charset
+AddDefaultCharset UTF-8
+
+# PHP Settings
+php_value upload_max_filesize 2M
+php_value post_max_size 2M
+php_value max_execution_time 300
+php_value memory_limit 256M
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Prevent directory listing
+Options -Indexes
+
+# Protect sensitive files
+<FilesMatch "\.(sql|log|env|ini)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Cache static assets
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+</IfModule>
+
+# Gzip compression
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript
+</IfModule>
+
+# Error pages (optional)
+ErrorDocument 404 /index.html
+ErrorDocument 500 /index.html

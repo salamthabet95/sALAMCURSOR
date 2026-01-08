@@ -19,3 +19,23 @@ out/
 
 # OS / cache
 *.log
+
+# Cursor IDE
+.cursor/
+
+# Storage (uploads and exports)
+/storage/uploads/*
+/storage/exports/*
+!/storage/uploads/.gitkeep
+!/storage/exports/.gitkeep
+
+# Composer
+/vendor/
+composer.lock
+
+# Config files with sensitive data
+public_html/config/database.php
+public_html/config/config.php
+
+# Keep example files
+!public_html/config/database.php.example

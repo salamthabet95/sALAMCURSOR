@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إنشاء الإمساكية - إمساكية رمضان للشركات</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/wizard.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <a href="index.html" style="text-decoration: none; color: inherit;">
+          <h1>🌙 إمساكية رمضان للشركات</h1>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wizard-container">
+    <div class="container">
+      <div class="wizard-progress">
+        <div class="progress-step active" data-step="1">
+          <div class="step-circle">1</div>
+          <span>اختيار المدينة</span>
+        </div>
+        <div class="progress-step" data-step="2">
+          <div class="step-circle">2</div>
+          <span>بيانات الشركة</span>
+        </div>
+        <div class="progress-step" data-step="3">
+          <div class="step-circle">3</div>
+          <span>اختيار القالب</span>
+        </div>
+        <div class="progress-step" data-step="4">
+          <div class="step-circle">4</div>
+          <span>الدفع والتسليم</span>
+        </div>
+      </div>
+
+      <form id="wizardForm" class="wizard-form">
+        <!-- Step 1: City Selection -->
+        <div class="wizard-step active" id="step1">
+          <h2>اختر المدينة</h2>
+          <p class="step-description">اختر المدينة للحصول على مواقيت الصلاة الدقيقة</p>
+          
+          <div class="form-group">
+            <label for="city">اسم المدينة</label>
+            <input type="text" id="city" name="city" placeholder="مثال: رام الله، نابلس، القدس..." required>
+            <div id="citySuggestions" class="suggestions"></div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" onclick="window.location.href='index.html'">إلغاء</button>
+            <button type="button" class="btn btn-primary" onclick="nextStep(2)">التالي</button>
+          </div>
+        </div>
+
+        <!-- Step 2: Company Data -->
+        <div class="wizard-step" id="step2">
+          <h2>بيانات الشركة</h2>
+          <p class="step-description">أدخل معلومات شركتك وشعارها</p>
+          
+          <div class="form-group">
+            <label for="companyName">اسم الشركة</label>
+            <input type="text" id="companyName" name="companyName" placeholder="اسم الشركة" required>
+          </div>
+
+          <div class="form-group">
+            <label for="companyLogo">شعار الشركة (PNG/JPG - حد أقصى 2MB)</label>
+            <input type="file" id="companyLogo" name="companyLogo" accept="image/png,image/jpeg" required>
+            <div class="logo-preview" id="logoPreview"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="companyPhone">رقم الهاتف (اختياري)</label>
+            <input type="tel" id="companyPhone" name="companyPhone" placeholder="0599123456">
+          </div>
+
+          <div class="form-group">
+            <label for="companyAddress">العنوان (اختياري)</label>
+            <input type="text" id="companyAddress" name="companyAddress" placeholder="عنوان الشركة">
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" onclick="prevStep(1)">السابق</button>
+            <button type="button" class="btn btn-primary" onclick="nextStep(3)">التالي</button>
+          </div>
+        </div>
+
+        <!-- Step 3: Template Selection -->
+        <div class="wizard-step" id="step3">
+          <h2>اختر القالب</h2>
+          <p class="step-description">اختر التصميم الذي يناسب شركتك</p>
+          
+          <div class="templates-grid">
+            <div class="template-option" data-template="1">
+              <div class="template-preview template-preview-1">
+                <div class="template-header">Corporate Clean</div>
+                <div class="template-sample">نظيف ومهني</div>
+              </div>
+              <input type="radio" name="template" value="1" id="template1" required>
+              <label for="template1">Corporate Clean</label>
+            </div>
+
+            <div class="template-option" data-template="2">
+              <div class="template-preview template-preview-2">
+                <div class="template-header">Modern Ramadan</div>
+                <div class="template-sample">عصري وحديث</div>
+              </div>
+              <input type="radio" name="template" value="2" id="template2" required>
+              <label for="template2">Modern Ramadan</label>
+            </div>
+
+            <div class="template-option" data-template="3">
+              <div class="template-preview template-preview-3">
+                <div class="template-header">Traditional Arabic</div>
+                <div class="template-sample">تقليدي عربي</div>
+              </div>
+              <input type="radio" name="template" value="3" id="template3" required>
+              <label for="template3">Traditional Arabic</label>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" onclick="prevStep(2)">السابق</button>
+            <button type="button" class="btn btn-primary" onclick="nextStep(4)">التالي</button>
+          </div>
+        </div>
+
+        <!-- Step 4: Payment -->
+        <div class="wizard-step" id="step4">
+          <h2>الدفع والتسليم</h2>
+          <p class="step-description">راجع بياناتك وأكمل العملية</p>
+          
+          <div class="summary-card">
+            <h3>ملخص الطلب</h3>
+            <div class="summary-item">
+              <span>المدينة:</span>
+              <span id="summaryCity">-</span>
+            </div>
+            <div class="summary-item">
+              <span>اسم الشركة:</span>
+              <span id="summaryCompany">-</span>
+            </div>
+            <div class="summary-item">
+              <span>القالب:</span>
+              <span id="summaryTemplate">-</span>
+            </div>
+            <div class="summary-item total">
+              <span>المجموع:</span>
+              <span>50 شيكل</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="customerName">الاسم الكامل</label>
+            <input type="text" id="customerName" name="customerName" placeholder="اسمك الكامل" required>
+          </div>
+
+          <div class="form-group">
+            <label for="customerEmail">البريد الإلكتروني</label>
+            <input type="email" id="customerEmail" name="customerEmail" placeholder="example@email.com" required>
+          </div>
+
+          <div class="form-group">
+            <label for="customerPhone">رقم الهاتف</label>
+            <input type="tel" id="customerPhone" name="customerPhone" placeholder="0599123456" required>
+          </div>
+
+          <div class="payment-note">
+            <p>💳 <strong>ملاحظة:</strong> هذا نموذج تجريبي. لن يتم خصم أي مبلغ فعلي.</p>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" onclick="prevStep(3)">السابق</button>
+            <button type="submit" class="btn btn-primary">إنشاء الإمساكية</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script src="assets/js/wizard.js"></script>
+</body>
+</html>
