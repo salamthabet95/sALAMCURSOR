@@ -13,11 +13,17 @@ function generatePDF($orderId, $companyName, $logoPath, $templateId, $prayerTime
         $templateFile = __DIR__ . "/../templates/template-1.php";
     }
     
-    // Prepare data
+    // Prepare data - convert logo path to web-accessible URL if needed
+    $logoUrl = null;
+    if ($logoPath && file_exists($logoPath)) {
+        // Get relative path from storage/uploads
+        $logoUrl = '../storage/uploads/' . basename($logoPath);
+    }
+    
     $data = [
         'order_id' => $orderId,
         'company_name' => $companyName,
-        'logo_path' => $logoPath,
+        'logo_path' => $logoUrl,
         'phone' => $phone,
         'address' => $address,
         'prayer_times' => $prayerTimesData['prayer_times'],

@@ -1,11 +1,40 @@
 <?php
+// Enable error reporting for debugging (remove in production)
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
-require_once '../config/database.php';
-require_once '../config/config.php';
+// Handle preflight requests
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
+// Load configuration files
+$configPath = __DIR__ . '/../config/config.php';
+$dbPath = __DIR__ . '/../config/database.php';
+
+if (!file_exists($configPath)) {
+    echo json_encode([
+        'success' => false,
+        'message' => 'ملف الإعدادات غير موجود. يرجى نسخ config.php.example إلى config.php'
+    ], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+require_once $configPath;
+
+if (!file_exists($dbPath)) {
+    // Try to continue without database (for testing)
+    $pdo = null;
+} else {
+    require_once $dbPath;
+}
 
 // Handle POST request
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -77,85 +106,109 @@ if (isset($_FILES['companyLogo']) && $_FILES['companyLogo']['error'] === UPLOAD_
 }
 
 // Fetch prayer times
-$prayerTimesUrl = "http://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']) . "/prayer-times.php?city=" . urlencode($city);
-$prayerTimesResponse = @file_get_contents($prayerTimesUrl);
+$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$prayerTimesUrl = $protocol . "://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']) . "/prayer-times.php?city=" . urlencode($city);
+
+$context = stream_context_create([
+    'http' => [
+        'timeout' => 10,
+        'ignore_errors' => true
+    ]
+]);
+
+$prayerTimesResponse = @file_get_contents($prayerTimesUrl, false, $context);
 $prayerTimesData = json_decode($prayerTimesResponse, true);
 
 if (!$prayerTimesData || !$prayerTimesData['success']) {
+    $errorMsg = 'فشل في جلب مواقيت الصلاة';
+    if (isset($prayerTimesData['message'])) {
+        $errorMsg .= ': ' . $prayerTimesData['message'];
+    }
     echo json_encode([
         'success' => false,
-        'message' => 'فشل في جلب مواقيت الصلاة'
-    ]);
+        'message' => $errorMsg,
+        'debug' => $prayerTimesResponse ? substr($prayerTimesResponse, 0, 200) : 'No response'
+    ], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
 // Generate order ID
 $orderId = 'ORD' . date('Ymd') . strtoupper(uniqid());
 
-// Save order to database
-try {
-    $stmt = $pdo->prepare("
-        INSERT INTO orders (
-            order_id, city, company_name, company_phone, company_address,
-            logo_path, template_id, customer_name, customer_email, customer_phone,
-            created_at, status
-        ) VALUES (
-            :order_id, :city, :company_name, :company_phone, :company_address,
-            :logo_path, :template_id, :customer_name, :customer_email, :customer_phone,
-            NOW(), 'pending'
-        )
-    ");
-    
-    $stmt->execute([
-        ':order_id' => $orderId,
-        ':city' => $city,
-        ':company_name' => $companyName,
-        ':company_phone' => $companyPhone,
-        ':company_address' => $companyAddress,
-        ':logo_path' => $logoPath ? basename($logoPath) : null,
-        ':template_id' => $template,
-        ':customer_name' => $customerName,
-        ':customer_email' => $customerEmail,
-        ':customer_phone' => $customerPhone
-    ]);
-    
-    $orderDbId = $pdo->lastInsertId();
-    
-} catch (PDOException $e) {
-    error_log("Database error: " . $e->getMessage());
-    echo json_encode([
-        'success' => false,
-        'message' => 'خطأ في حفظ البيانات'
-    ]);
-    exit;
+// Save order to database (if available)
+$orderDbId = null;
+if ($pdo) {
+    try {
+        $stmt = $pdo->prepare("
+            INSERT INTO orders (
+                order_id, city, company_name, company_phone, company_address,
+                logo_path, template_id, customer_name, customer_email, customer_phone,
+                created_at, status
+            ) VALUES (
+                :order_id, :city, :company_name, :company_phone, :company_address,
+                :logo_path, :template_id, :customer_name, :customer_email, :customer_phone,
+                NOW(), 'pending'
+            )
+        ");
+        
+        $stmt->execute([
+            ':order_id' => $orderId,
+            ':city' => $city,
+            ':company_name' => $companyName,
+            ':company_phone' => $companyPhone,
+            ':company_address' => $companyAddress,
+            ':logo_path' => $logoPath ? basename($logoPath) : null,
+            ':template_id' => $template,
+            ':customer_name' => $customerName,
+            ':customer_email' => $customerEmail,
+            ':customer_phone' => $customerPhone
+        ]);
+        
+        $orderDbId = $pdo->lastInsertId();
+        
+    } catch (PDOException $e) {
+        error_log("Database error: " . $e->getMessage());
+        // Continue without database for now
+    }
 }
 
 // Generate PDF and Image
-require_once '../includes/pdf-generator.php';
-require_once '../includes/image-generator.php';
+require_once __DIR__ . '/../includes/pdf-generator.php';
+require_once __DIR__ . '/../includes/image-generator.php';
 
-$pdfPath = generatePDF($orderId, $companyName, $logoPath, $template, $prayerTimesData['data'], $companyPhone, $companyAddress);
-$imagePath = generateImage($orderId, $companyName, $logoPath, $template, $prayerTimesData['data'], $companyPhone, $companyAddress);
-
-// Save generated files info
 try {
-    $stmt = $pdo->prepare("
-        INSERT INTO generated_files (order_id, pdf_path, image_path, created_at)
-        VALUES (:order_id, :pdf_path, :image_path, NOW())
-    ");
-    
-    $stmt->execute([
-        ':order_id' => $orderId,
-        ':pdf_path' => basename($pdfPath),
-        ':image_path' => basename($imagePath)
-    ]);
-    
-    // Update order status
-    $stmt = $pdo->prepare("UPDATE orders SET status = 'completed' WHERE id = :id");
-    $stmt->execute([':id' => $orderDbId]);
-    
-} catch (PDOException $e) {
-    error_log("Database error: " . $e->getMessage());
+    $pdfPath = generatePDF($orderId, $companyName, $logoPath, $template, $prayerTimesData['data'], $companyPhone, $companyAddress);
+    $imagePath = generateImage($orderId, $companyName, $logoPath, $template, $prayerTimesData['data'], $companyPhone, $companyAddress);
+} catch (Exception $e) {
+    error_log("Generation error: " . $e->getMessage());
+    echo json_encode([
+        'success' => false,
+        'message' => 'فشل في إنشاء الملفات: ' . $e->getMessage()
+    ], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+// Save generated files info (if database available)
+if ($pdo && $orderDbId) {
+    try {
+        $stmt = $pdo->prepare("
+            INSERT INTO generated_files (order_id, pdf_path, image_path, created_at)
+            VALUES (:order_id, :pdf_path, :image_path, NOW())
+        ");
+        
+        $stmt->execute([
+            ':order_id' => $orderId,
+            ':pdf_path' => basename($pdfPath),
+            ':image_path' => basename($imagePath)
+        ]);
+        
+        // Update order status
+        $stmt = $pdo->prepare("UPDATE orders SET status = 'completed' WHERE id = :id");
+        $stmt->execute([':id' => $orderDbId]);
+        
+    } catch (PDOException $e) {
+        error_log("Database error: " . $e->getMessage());
+    }
 }
 
 // Return success response

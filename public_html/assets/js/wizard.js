@@ -220,10 +220,18 @@ function setupFormSubmit() {
     formData.append('template', document.querySelector('input[name="template"]:checked').value);
 
     try {
-      const response = await fetch('api/generate-imsakiya.php', {
+      // Use absolute path to avoid path issues
+      const apiUrl = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '') + '/api/generate-imsakiya.php';
+      
+      const response = await fetch(apiUrl, {
         method: 'POST',
         body: formData
       });
+
+      // Check if response is OK
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
       const result = await response.json();
 
@@ -231,13 +239,21 @@ function setupFormSubmit() {
         // Redirect to success page
         window.location.href = `success.html?order_id=${result.order_id}`;
       } else {
-        alert('حدث خطأ: ' + (result.message || 'فشل في إنشاء الإمساكية'));
+        const errorMsg = result.message || 'فشل في إنشاء الإمساكية';
+        console.error('API Error:', result);
+        alert('حدث خطأ: ' + errorMsg);
         submitBtn.disabled = false;
         submitBtn.textContent = originalText;
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى.');
+      let errorMsg = 'حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى.';
+      
+      if (error.message) {
+        console.error('Error details:', error.message);
+      }
+      
+      alert(errorMsg + '\n\nيرجى التحقق من:\n- إعدادات قاعدة البيانات\n- ملف config.php\n- سجلات الأخطاء في cPanel');
       submitBtn.disabled = false;
       submitBtn.textContent = originalText;
     }

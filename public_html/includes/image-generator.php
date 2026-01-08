@@ -18,10 +18,17 @@ function generateImage($orderId, $companyName, $logoPath, $templateId, $prayerTi
         $templateFile = __DIR__ . "/../templates/template-1-image.php";
     }
     
+    // Prepare data - convert logo path to web-accessible URL if needed
+    $logoUrl = null;
+    if ($logoPath && file_exists($logoPath)) {
+        // Get relative path from storage/uploads
+        $logoUrl = '../storage/uploads/' . basename($logoPath);
+    }
+    
     $data = [
         'order_id' => $orderId,
         'company_name' => $companyName,
-        'logo_path' => $logoPath,
+        'logo_path' => $logoUrl,
         'phone' => $phone,
         'address' => $address,
         'prayer_times' => array_slice($prayerTimesData['prayer_times'], 0, 7), // First 7 days for image
