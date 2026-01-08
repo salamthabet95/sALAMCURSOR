@@ -1,0 +1,14 @@
+# Backup - Simplified .htaccess for troubleshooting
+# If you get 403 errors, temporarily rename this to .htaccess
+
+# Enable Rewrite Engine
+RewriteEngine On
+
+# Set default charset
+AddDefaultCharset UTF-8
+
+# Prevent directory listing
+Options -Indexes
+
+# Allow all files (for testing)
+Require all granted

@@ -28,8 +28,7 @@ Options -Indexes
 
 # Protect sensitive files
 <FilesMatch "\.(sql|log|env|ini)$">
-    Order allow,deny
-    Deny from all
+    Require all denied
 </FilesMatch>
 
 # Cache static assets
@@ -48,4 +47,15 @@ Options -Indexes
 
 # Error pages (optional)
 ErrorDocument 404 /index.html
+ErrorDocument 403 /index.html
 ErrorDocument 500 /index.html
+
+# Allow access to index files
+<Files "index.html">
+    Require all granted
+</Files>
+
+# Allow access to API files
+<DirectoryMatch "^.*/api/">
+    Require all granted
+</DirectoryMatch>

@@ -1,0 +1,16 @@
+# Simplified .htaccess for troubleshooting 403 errors
+# Rename this to .htaccess if you get 403 errors
+
+# Enable Rewrite Engine
+RewriteEngine On
+
+# Set default charset
+AddDefaultCharset UTF-8
+
+# Prevent directory listing
+Options -Indexes
+
+# Allow all access (for testing)
+<RequireAll>
+    Require all granted
+</RequireAll>
