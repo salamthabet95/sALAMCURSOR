@@ -63,8 +63,10 @@ git push -u origin main
 3. أضف Repository:
    - Repository URL: `https://github.com/YOUR_USERNAME/sALAMCURSOR.git`
    - Branch: `main`
-   - Install Path: `/public_html`
+   - **Install Path: `/`** ⚠️ **مهم:** استخدم `/` وليس `/public_html` لأن الملفات موجودة أصلاً في `public_html/` في المشروع
    - فعّل Auto Deploy
+   
+   **ملاحظة:** إذا كان Install Path `/public_html`، الملفات ستكون في `/public_html/public_html` على السيرفر!
 4. احفظ Webhook URL (ستحتاجه لاحقاً)
 
 ### الخطوة 4: إعداد GitHub Webhook (اختياري)

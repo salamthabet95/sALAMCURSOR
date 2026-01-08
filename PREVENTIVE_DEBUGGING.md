@@ -81,32 +81,38 @@ git checkout -b hotfix/security-patch
 ```
 Repository URL: https://github.com/USERNAME/REPO.git
 Branch: main
-Install Path: /public_html
+Install Path: /  ⚠️ مهم: استخدم / وليس /public_html
 Auto Deploy: ✅ Enabled
 ```
 
 ### قواعد مهمة:
 
 ✅ **DO:**
-- استخدم `/public_html` إذا كان المشروع في `public_html/`
-- استخدم `/` إذا كان المشروع في الجذر
+- استخدم `/` إذا كان المشروع فيه مجلد `public_html/` (مثل مشروعنا)
+- استخدم `/public_html` فقط إذا كان المشروع في الجذر بدون مجلد `public_html/`
 - تأكد من أن Path يتطابق مع هيكل المشروع
 
 ❌ **DON'T:**
-- لا تستخدم `/public_html/public_html`
+- لا تستخدم `/public_html` إذا كان المشروع فيه `public_html/` (ستحصل على `/public_html/public_html`)
 - لا تستخدم paths نسبية
 - لا تغيّر Path بدون سبب
 
 ### مثال:
 
 ```
-إذا كان المشروع:
+إذا كان المشروع (مثل مشروعنا):
 project/
 └── public_html/
     └── index.html
 
 Install Path يجب أن يكون:
-/public_html
+/  ✅ (الجذر)
+
+لأن Hostinger سينسخ محتويات المشروع إلى Install Path
+فإذا كان Install Path = /public_html
+والملفات في public_html/ في المشروع
+النتيجة: /public_html/public_html/ ❌
+```
 
 ---
 
