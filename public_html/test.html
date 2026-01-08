@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Page - صفحة الاختبار</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            direction: rtl;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        .status {
+            font-size: 1.2rem;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        .info {
+            margin: 10px 0;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .timestamp {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        .checks {
+            margin-top: 30px;
+            text-align: right;
+        }
+        .check-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            text-align: right;
+        }
+        .check-item.success::before {
+            content: "✅ ";
+        }
+        .check-item.error::before {
+            content: "❌ ";
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Deploy Successful!</h1>
+        <div class="status">النشر نجح بنجاح</div>
+        
+        <div class="timestamp" id="timestamp"></div>
+        
+        <div class="info">
+            <p>إذا رأيت هذه الصفحة، فالنشر يعمل بشكل صحيح.</p>
+            <p>If you see this page, deployment is working correctly.</p>
+        </div>
+
+        <div class="checks">
+            <h3>فحوصات سريعة:</h3>
+            <div class="check-item success" id="check-html">HTML يعمل</div>
+            <div class="check-item success" id="check-css">CSS يعمل</div>
+            <div class="check-item" id="check-js">JavaScript يعمل</div>
+            <div class="check-item" id="check-api">API Connection</div>
+        </div>
+    </div>
+
+    <script>
+        // Update timestamp
+        function updateTimestamp() {
+            const now = new Date();
+            const timestamp = now.toLocaleString('ar-SA', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('timestamp').textContent = `الوقت: ${timestamp}`;
+        }
+        updateTimestamp();
+        setInterval(updateTimestamp, 1000);
+
+        // Check JavaScript
+        document.getElementById('check-js').classList.add('success');
+        document.getElementById('check-js').textContent = '✅ JavaScript يعمل';
+
+        // Check API
+        fetch('api/test-connection.php')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('check-api').classList.add('success');
+                document.getElementById('check-api').textContent = '✅ API يعمل';
+            })
+            .catch(error => {
+                document.getElementById('check-api').classList.add('error');
+                document.getElementById('check-api').textContent = '❌ API لا يعمل: ' + error.message;
+            });
+    </script>
+</body>
+</html>
