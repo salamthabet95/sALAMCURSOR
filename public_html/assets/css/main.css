@@ -222,68 +222,199 @@ body {
   color: var(--white);
 }
 
+.preview-city-selector {
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.preview-city-selector label {
+  margin-left: 0.5rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.city-select {
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'Cairo', sans-serif;
+  background: var(--white);
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.city-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.preview-loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-light);
+}
+
 .preview-display {
   background: var(--bg-light);
   padding: 2rem;
   border-radius: 12px;
-  min-height: 400px;
+  min-height: 500px;
+  overflow-x: auto;
 }
 
 .imsakiya-preview {
   background: var(--white);
   padding: 2rem;
-  border-radius: 8px;
-  max-width: 600px;
+  border-radius: 12px;
+  max-width: 900px;
   margin: 0 auto;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  transition: all 0.3s;
+}
+
+.imsakiya-preview.template-1 {
+  background: #ffffff;
+  color: #2c5530;
+  border: 1px solid #e0e0e0;
+}
+
+.imsakiya-preview.template-2 {
+  background: linear-gradient(135deg, #2c5530 0%, #1e3a21 100%);
+  color: #ffffff;
+  border: 2px solid #d4af37;
+}
+
+.imsakiya-preview.template-3 {
+  background: #f5f5dc;
+  color: #8b4513;
+  border: 2px solid #8b4513;
 }
 
 .preview-header {
   text-align: center;
   margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid var(--border-color);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-bottom: 3px solid;
+}
+
+.imsakiya-preview.template-1 .preview-header {
+  background: #f8f9fa;
+  border-bottom-color: #2c5530;
+}
+
+.imsakiya-preview.template-2 .preview-header {
+  background: rgba(212, 175, 55, 0.2);
+  border-bottom-color: #d4af37;
+}
+
+.imsakiya-preview.template-3 .preview-header {
+  background: rgba(139, 69, 19, 0.1);
+  border-bottom-color: #8b4513;
 }
 
 .preview-logo {
   width: 80px;
   height: 80px;
-  background: var(--bg-light);
-  border: 2px dashed var(--border-color);
-  border-radius: 8px;
+  background: rgba(255,255,255,0.2);
+  border: 2px dashed;
+  border-radius: 50%;
   margin: 0 auto 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9rem;
-  color: var(--text-light);
+  font-size: 2rem;
 }
 
 .preview-header h3 {
-  color: var(--primary-color);
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.preview-city-name {
+  font-size: 1rem;
+  opacity: 0.8;
+  margin-top: 0.5rem;
+}
+
+.preview-table-container {
+  overflow-x: auto;
+  max-height: 500px;
+  overflow-y: auto;
 }
 
 .preview-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
+  font-size: 0.9rem;
 }
 
 .preview-table th,
 .preview-table td {
-  padding: 0.75rem;
+  padding: 0.75rem 0.5rem;
   text-align: center;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 
 .preview-table th {
-  background: var(--primary-color);
-  color: var(--white);
-  font-weight: 600;
+  font-weight: 700;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.imsakiya-preview.template-1 .preview-table th {
+  background: #2c5530;
+  color: #ffffff;
+}
+
+.imsakiya-preview.template-2 .preview-table th {
+  background: rgba(212, 175, 55, 0.3);
+  color: #ffffff;
+}
+
+.imsakiya-preview.template-3 .preview-table th {
+  background: #8b4513;
+  color: #f5f5dc;
 }
 
 .preview-table tr:hover {
-  background: var(--bg-light);
+  background: rgba(0,0,0,0.05);
+}
+
+.imsakiya-preview.template-2 .preview-table tr:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.imsak-time {
+  color: #d4af37;
+  font-weight: 700;
+}
+
+.fajr-time {
+  color: #2c5530;
+  font-weight: 700;
+}
+
+.maghrib-time {
+  color: #c0392b;
+  font-weight: 700;
+}
+
+.imsakiya-preview.template-2 .imsak-time,
+.imsakiya-preview.template-2 .fajr-time,
+.imsakiya-preview.template-2 .maghrib-time {
+  color: #ffd700;
+}
+
+.imsakiya-preview.template-3 .imsak-time,
+.imsakiya-preview.template-3 .fajr-time,
+.imsakiya-preview.template-3 .maghrib-time {
+  color: #8b4513;
 }
 
 /* Features Section */

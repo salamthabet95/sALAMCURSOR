@@ -28,6 +28,9 @@
       margin-bottom: 30px;
       border-bottom: 3px solid #d4af37;
       padding-bottom: 20px;
+      background: rgba(212, 175, 55, 0.15);
+      padding: 25px;
+      border-radius: 8px;
     }
     .logo {
       max-width: 150px;

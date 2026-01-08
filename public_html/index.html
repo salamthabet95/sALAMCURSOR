@@ -72,36 +72,43 @@
             <button class="preview-btn" data-template="2">Modern Ramadan</button>
             <button class="preview-btn" data-template="3">Traditional Arabic</button>
           </div>
+          <div class="preview-city-selector">
+            <label for="previewCity">اختر المدينة:</label>
+            <select id="previewCity" class="city-select">
+              <option value="رام الله">رام الله</option>
+              <option value="نابلس">نابلس</option>
+              <option value="القدس">القدس</option>
+              <option value="بيت لحم">بيت لحم</option>
+              <option value="الخليل">الخليل</option>
+              <option value="غزة">غزة</option>
+            </select>
+          </div>
+          <div class="preview-loading" id="previewLoading" style="display: none;">
+            <p>جاري تحميل المواقيت...</p>
+          </div>
           <div class="preview-display" id="previewDisplay">
-            <div class="imsakiya-preview template-1">
+            <div class="imsakiya-preview template-1" id="imsakiyaPreview">
               <div class="preview-header">
-                <div class="preview-logo">شعار الشركة</div>
+                <div class="preview-logo">🌙</div>
                 <h3>شركة تجريبية</h3>
+                <p class="preview-city-name">رام الله</p>
               </div>
-              <table class="preview-table">
-                <thead>
-                  <tr>
-                    <th>التاريخ</th>
-                    <th>الإمساك</th>
-                    <th>الفجر</th>
-                    <th>المغرب</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>1 رمضان</td>
-                    <td>4:30</td>
-                    <td>4:45</td>
-                    <td>7:15</td>
-                  </tr>
-                  <tr>
-                    <td>2 رمضان</td>
-                    <td>4:29</td>
-                    <td>4:44</td>
-                    <td>7:16</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="preview-table-container">
+                <table class="preview-table">
+                  <thead>
+                    <tr>
+                      <th>اليوم</th>
+                      <th>التاريخ</th>
+                      <th>الإمساك</th>
+                      <th>الفجر</th>
+                      <th>المغرب</th>
+                    </tr>
+                  </thead>
+                  <tbody id="previewTableBody">
+                    <!-- سيتم ملؤه ديناميكياً -->
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>

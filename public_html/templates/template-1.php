@@ -21,12 +21,16 @@
       margin: 0 auto;
       background: white;
       padding: 30px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     .header {
       text-align: center;
       margin-bottom: 30px;
       border-bottom: 3px solid #2c5530;
       padding-bottom: 20px;
+      background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+      padding: 25px;
+      border-radius: 8px;
     }
     .logo {
       max-width: 150px;
