@@ -34,8 +34,11 @@ out/
 composer.lock
 
 # Config files with sensitive data
-public_html/config/database.php
-public_html/config/config.php
+config/database.php
+config/config.php
 
 # Keep example files
-!public_html/config/database.php.example
+!config/database.php.example
+
+# Old public_html directory (if exists)
+public_html/

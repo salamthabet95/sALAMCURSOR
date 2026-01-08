@@ -6,15 +6,13 @@
 
 ```
 project/
-├── public_html/              # جميع ملفات النشر هنا
-│   ├── index.html
-│   ├── api/
-│   ├── assets/
-│   ├── templates/
-│   ├── storage/
-│   ├── includes/
-│   ├── config/
-│   └── ...
+├── index.html                # جميع ملفات النشر في الجذر
+├── api/
+├── assets/
+├── templates/
+├── storage/
+├── includes/
+├── config/
 ├── scripts/                  # سكريبتات مساعدة (لا تُنشر)
 ├── .gitignore
 ├── README.md
@@ -52,8 +50,8 @@ project/
 │ main                                    │
 │                                         │
 │ Install Path:                           │
-│ /                    ⚠️ الجذر وليس     │
-│                      /public_html       │
+│ /public_html        ⚠️ لأن الملفات     │
+│                      في الجذر مباشرة    │
 │                                         │
 │ Auto Deploy:                            │
 │ ✅ Enabled                              │
@@ -62,11 +60,10 @@ project/
 
 ### كيف يعمل:
 
-1. **GitHub Repository** فيه: `public_html/index.html`
-2. **Install Path** = `/` (الجذر)
-3. **Hostinger** ينشر محتويات المشروع في `/`
-4. بما أن المشروع فيه `public_html/`
-5. **النتيجة:** `/public_html/index.html` ✅
+1. **GitHub Repository** فيه: `index.html` (في الجذر)
+2. **Install Path** = `/public_html`
+3. **Hostinger** ينشر محتويات المشروع في `/public_html`
+4. **النتيجة:** `/public_html/index.html` ✅
 
 ---
 

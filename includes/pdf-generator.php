@@ -17,7 +17,7 @@ function generatePDF($orderId, $companyName, $logoPath, $templateId, $prayerTime
     $logoUrl = null;
     if ($logoPath && file_exists($logoPath)) {
         // Get relative path from storage/uploads
-        $logoUrl = '../storage/uploads/' . basename($logoPath);
+        $logoUrl = 'storage/uploads/' . basename($logoPath);
     }
     
     $data = [

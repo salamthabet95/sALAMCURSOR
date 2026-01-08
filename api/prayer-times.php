@@ -4,8 +4,8 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
-require_once '../config/database.php';
-require_once '../config/config.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/config.php';
 
 // Get city from request
 $city = isset($_GET['city']) ? trim($_GET['city']) : '';
@@ -22,7 +22,7 @@ if (empty($city)) {
 
 // Check cache first
 $cacheKey = "prayer_times_{$city}_{$year}_{$month}";
-$cacheFile = "../storage/cache/{$cacheKey}.json";
+$cacheFile = __DIR__ . "/../storage/cache/{$cacheKey}.json";
 
 if (file_exists($cacheFile)) {
     $cacheData = json_decode(file_get_contents($cacheFile), true);
@@ -158,8 +158,9 @@ $result = [
 ];
 
 // Save to cache
-if (!is_dir('../storage/cache')) {
-    mkdir('../storage/cache', 0755, true);
+$cacheDir = __DIR__ . '/../storage/cache';
+if (!is_dir($cacheDir)) {
+    mkdir($cacheDir, 0755, true);
 }
 file_put_contents($cacheFile, json_encode([
     'timestamp' => time(),

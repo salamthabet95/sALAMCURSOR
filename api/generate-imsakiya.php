@@ -107,7 +107,8 @@ if (isset($_FILES['companyLogo']) && $_FILES['companyLogo']['error'] === UPLOAD_
 
 // Fetch prayer times
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-$prayerTimesUrl = $protocol . "://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']) . "/prayer-times.php?city=" . urlencode($city);
+$basePath = dirname($_SERVER['SCRIPT_NAME']);
+$prayerTimesUrl = $protocol . "://" . $_SERVER['HTTP_HOST'] . $basePath . "/prayer-times.php?city=" . urlencode($city);
 
 $context = stream_context_create([
     'http' => [
