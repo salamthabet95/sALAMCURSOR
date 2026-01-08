@@ -1,9 +1,11 @@
 -- Database Schema for Ramadan Imsakiya SaaS
 -- Run this SQL in your Hostinger MySQL database
+-- 
+-- ⚠️ ملاحظة: إذا كنت تستخدم phpMyAdmin، أنشئ قاعدة البيانات أولاً
+-- ثم استورد هذا الملف. السطر CREATE DATABASE قد لا يعمل في بعض الحالات.
 
-CREATE DATABASE IF NOT EXISTS ramadan_imsakiya CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
-USE ramadan_imsakiya;
+-- CREATE DATABASE IF NOT EXISTS ramadan_imsakiya CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- USE ramadan_imsakiya;
 
 -- Orders table
 CREATE TABLE IF NOT EXISTS orders (
